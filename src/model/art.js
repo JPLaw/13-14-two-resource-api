@@ -22,7 +22,7 @@ const artSchema = mongoose.Schema({
     default: 'Painting',
     enum: ['Painting', 'sculpture', 'sketch', 'photography'],
   },
-  theMuseumId: { 
+  museumId: { 
     type: mongoose.Schema.Types.ObjectId,
     required: true,
     ref: 'museum',
@@ -37,7 +37,7 @@ export default mongoose.model('art', artSchema, 'art', skipInit);
 function artPreHook(done) {
   // done is using an (error,data) signature
   // the value of 'contextual this' is the document
-  return Museum.findById(this.theMuseumId)
+  return Museum.findById(this.museumId)
     .then((foundMuseum) => {
       foundMuseum.art.push(this._id);
       return foundMuseum.save();
@@ -48,7 +48,7 @@ function artPreHook(done) {
 
 const artPostHook = (document, done) => {
   // document refers to the current instance of this student schema
-  return Museum.findById(document.theMuseumId)
+  return Museum.findById(document.museumId)
     .then((foundMuseum) => {
       foundMuseum.students = foundMuseum.art.filter(art => art._id.toString() !== document._id.toString());
       return foundMuseum.save();
