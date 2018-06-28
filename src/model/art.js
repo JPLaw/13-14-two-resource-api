@@ -1,0 +1,61 @@
+'use strict';
+
+import mongoose from 'mongoose';
+import Museum from './museum';
+
+
+const artSchema = mongoose.Schema({
+  title: {
+    type: String,
+    required: true,
+  },
+  artistFirstName: {
+    type: String,
+    required: false,
+  },
+  artistLastName: {
+    type: String,
+    required: true,
+  },
+  medium: {
+    type: String,
+    default: 'Painting',
+    enum: ['Painting', 'sculpture', 'sketch', 'photography'],
+  },
+  theMuseumId: { 
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: 'museum',
+  },
+}, { timestamps: true });
+
+const skipInit = process.env.NODE_ENV === 'development';
+
+
+export default mongoose.model('art', artSchema, 'art', skipInit);
+
+function artPreHook(done) {
+  // done is using an (error,data) signature
+  // the value of 'contextual this' is the document
+  return Museum.findById(this.theMuseumId)
+    .then((foundMuseum) => {
+      foundMuseum.art.push(this._id);
+      return foundMuseum.save();
+    })
+    .then(() => done()) // done without any arguments mean success - save
+    .catch(done); // done with results means an error - do not save
+}
+
+const artPostHook = (document, done) => {
+  // document refers to the current instance of this student schema
+  return Museum.findById(document.theMuseumId)
+    .then((foundMuseum) => {
+      foundMuseum.students = foundMuseum.art.filter(art => art._id.toString() !== document._id.toString());
+      return foundMuseum.save();
+    })
+    .then(() => done())
+    .catch(done);
+};
+
+artSchema.pre('save', artPreHook);
+artSchema.post('remove', artPostHook);
