@@ -31,7 +31,7 @@ describe('POST /api/museum', () => {
       });
   });
 
-  test('POST 400 for bad request if no request was provided', () => {
+  test('POST 400 for bad request if no request body was provided', () => {
     return superagent.post(apiUrl)
       .then((response) => {
         throw response;
@@ -57,8 +57,9 @@ describe('POST /api/museum', () => {
           throw err;
         });
     });
+    
     test('404 GET for valid request made with an id that was not found', () => {
-      return superagent.get(`${apiUrl}/"5b345f9d1086d2149c26d370"`)
+      return superagent.get(`${apiUrl}/"1234"`)
         .then((response) => {
           throw response;
         })
@@ -84,9 +85,9 @@ describe('POST /api/museum', () => {
         })
         .then((response) => {
           expect(response.status).toBe(200);
-          expect(response.body._id).toBe(returnedMuseum._id);
+          expect(response.body._id.toString()).toBe(returnedMuseum._id.toString());
           expect(response.body.name).toBe(mockMuseumForUpdate.name);
-          expect(response.body.director).toBe(response.body.location);
+          expect(response.body.location).toBe(response.body.location);
         })
         .catch((err) => {
           throw err;

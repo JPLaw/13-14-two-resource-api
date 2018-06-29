@@ -35,4 +35,27 @@ artRouter.get('/api/art/:id?', (request, response, next) => {
   return undefined;
 });
 
+artRouter.put('/api/art/:id?', (request, response, next) => {
+  if (JSON.stringify(request.body).length <= 2) return next(new HttpErrors(400, 'Not Found'));
+  
+  Art.init()
+    .then(() => {
+      // error checking
+      logger.log(logger.INFO, `ART ROUTER BEFORE PUT: Updating art piece ${JSON.stringify(request.body)}`);
+
+      const options = {
+        new: true,
+        runValidators: true,
+      };
+
+      return Art.findByIdAndUpdate(request.params.id, request.body, options);
+    })
+    .then((updatedArt) => {
+      logger.log(logger.INFO, `ART ROUTER AFTER PUT: Updated art details ${JSON.stringify(updatedArt)}`);
+      return response.json(updatedArt);
+    })
+    .catch(next);
+  return undefined;
+});
+
 export default artRouter;
