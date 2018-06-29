@@ -99,13 +99,16 @@ describe('PUT request to api/art', () => {
         return superagent.put(`${apiUrl}/${mockData.art._id}`)
           .send({ title: 'updated title', artist: 'updated artist' })
           .then((response) => {
-            expect(reponse.status).toEqual(200);
+            expect(response.status).toEqual(200);
             expect(response.body.name).toEqual('updated name');
             expect(response.body.location).toEqual('updated location');
-          });
+          })
           .catch((error) => {
             throw error;
           });
+      })
+      .catch((error) => {
+        throw error;
       });
   });
 
@@ -128,4 +131,4 @@ describe('PUT request to api/art', () => {
         expect(err.status).toEqual(400);
       });
   });
-
+});
