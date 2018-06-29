@@ -19,8 +19,7 @@ export default () => {
     .then(() => {
       const mockArt = {
         title: faker.lorem.words(2),
-        artistFirstName: faker.name.FirstName(),
-        artistLastName: faker.name.LastName(),
+        artistName: faker.lorem.words(2),
         theMuseumId: mockData.theMuseum._id,
       };
       return new Art(mockArt).save();
