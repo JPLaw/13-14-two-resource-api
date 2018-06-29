@@ -26,11 +26,24 @@ museumRouter.get('/api/museum/:id?', (request, response, next) => {
       return Museum.findOne({ _id: request.params.id });
     })
     .then((foundMuseum) => {
-      logger.log(logger.INFO, `CLASSROOM ROUTER: FOUND THE MODEL, ${JSON.stringify(foundMuseum)}`);
+      logger.log(logger.INFO, `MUSEUM ROUTER: FOUND THE MODEL, ${JSON.stringify(foundMuseum)}`);
       response.json(foundMuseum);
     })
     .catch(next);
-});
 
+  museumRouter.put('/api/museum/:id?', (request, response, next) => {
+    Museum.init()
+      .then(() => {
+        logger.log(logger.INFO, `MUSEUM ROUTER BEFORE PUT: Updating museum ${JSON.stringify(request.body)}`);
+    
+        console.log(request.body, 'PUT REQUEST BODY');
+        return Museum.findByIdAndUpdate(request.params.id, request.body);
+      })
+      .then((updatedMuseum) => {
+        console.log(updatedMuseum, 'UPDATED MUSEUM');
+      })
+      .catch(next);
+  });
+});
 
 export default museumRouter;

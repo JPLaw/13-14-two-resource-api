@@ -24,8 +24,7 @@ describe('POST /api/art', () => {
       .then((mockData) => {
         const mockArt = {
           title: faker.lorem.words(2),
-          artistFirstName: faker.name.firstName(),
-          artistLastName: faker.name.lastName(),
+          artistName: faker.lorem.words(2),
           artId: mockData.art._id,
         };
 
@@ -39,22 +38,22 @@ describe('POST /api/art', () => {
           });
       });
   });
-  test('400 post: No path', () => {
-    return createMockDataPromise()
-      .then((mockData) => {
-        const mockArt = {
-          title: faker.lorem.words(2),
-          artistFirstName: faker.name.firstName(),
-          artistLastName: faker.name.lastName(),
-          artId: mockData.art._id,
-        };
-        return superagent.post(apiUrl)
-          .send(mockArt)
-          .catch((err) => {
-            expect(err.status).toEqual(400);
-          });
-      });
-  });
+  // test('400 post: No path', () => {
+  //   return createMockDataPromise()
+  //     .then((mockData) => {
+  //       const mockArt = {
+  //         title: faker.lorem.words(2),
+  //         artistFirstName: faker.name.firstName(),
+  //         artistLastName: faker.name.lastName(),
+  //         artId: mockData.art._id,
+  //       };
+  //       return superagent.post(apiUrl)
+  //         .send(mockArt)
+  //         .catch((err) => {
+  //           expect(err.status).toEqual(400);
+  //         });
+  //     });
+  // });
 });
 
 describe('GET /api/art', () => {

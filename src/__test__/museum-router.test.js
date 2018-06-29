@@ -23,8 +23,7 @@ describe('POST /api/museum', () => {
       .send(mockResource)
       .then((response) => {
         expect(response.status).toEqual(200);
-        expect(response.body.title).toEqual(mockResource.title);
-        expect(response.body.location).toEqual(mockResource.location);
+        expect(response.body.name).toEqual(mockResource.name);
         expect(response.body._id).toBeTruthy();
       })
       .catch((err) => {
@@ -32,12 +31,8 @@ describe('POST /api/museum', () => {
       });
   });
 
-  test('POST 400 for not sending in a required NAME property', () => {
-    const mockMuseumToPost = {
-      name: faker.lorem.words(2),
-    };
+  test('POST 400 for bad request if no request was provided', () => {
     return superagent.post(apiUrl)
-      .send(mockMuseumToPost)
       .then((response) => {
         throw response;
       })
@@ -45,24 +40,6 @@ describe('POST /api/museum', () => {
         expect(err.status).toEqual(400);
       });
   });
-
-  test('POST 409 for a duplicate key', () => {
-    return createMockMuseumPromise()
-      .then((newMuseum) => {
-        return superagent.post(apiUrl)
-          .send({ name: newMuseum.name })
-          .then((response) => {
-            throw response;
-          })
-          .catch((err) => {
-            expect(err.status).toEqual(409);
-          });
-      })
-      .catch((err) => {
-        throw err;
-      });
-  });
-
 
   describe('GET /api/museum', () => {
     test('200 GET for successful fetching of a museum', () => {
@@ -74,9 +51,42 @@ describe('POST /api/museum', () => {
         })
         .then((response) => {
           expect(response.status).toEqual(200);
-          expect(response.body.title).toEqual(returnedMuseum.title);
-          expect(response.body.artistFirstName).toEqual(returnedMuseum.artistFirstName);
-          expect(response.body.artistLastName).toEqual(returnedMuseum.artistLastName);
+          expect(response.body.name).toEqual(returnedMuseum.name);
+        })
+        .catch((err) => {
+          throw err;
+        });
+    });
+    test('404 GET for valid request made with an id that was not found', () => {
+      return superagent.get(`${apiUrl}/"5b345f9d1086d2149c26d370"`)
+        .then((response) => {
+          throw response;
+        })
+        .catch((err) => {
+          expect(err.status).toBe(404);
+        });
+    });
+  });
+
+  describe('PUT /api/museum', () => {
+    const mockMuseumForUpdate = {
+      name: 'MoMA',
+      location: 'San Francisco',
+    };
+  
+    test('200 PUT for successful update of a resource', () => {
+      let returnedMuseum;
+      return createMockMuseumPromise()
+        .then((newMuseum) => {
+          returnedMuseum = newMuseum;
+          return superagent.put(`${apiUrl}/${newMuseum._id}`)
+            .send(mockMuseumForUpdate);
+        })
+        .then((response) => {
+          expect(response.status).toBe(200);
+          expect(response.body._id).toBe(returnedMuseum._id);
+          expect(response.body.name).toBe(mockMuseumForUpdate.name);
+          expect(response.body.director).toBe(response.body.location);
         })
         .catch((err) => {
           throw err;
