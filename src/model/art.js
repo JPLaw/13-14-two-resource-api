@@ -8,6 +8,7 @@ const artSchema = mongoose.Schema({
   title: {
     type: String,
     required: true,
+    unique: true,
   },
   artistFirstName: {
     type: String,
@@ -15,7 +16,7 @@ const artSchema = mongoose.Schema({
   },
   artistLastName: {
     type: String,
-    required: true,
+    required: false,
   },
   medium: {
     type: String,

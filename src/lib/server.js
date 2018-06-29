@@ -2,8 +2,8 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import logger from './logger';
-import classroomRouter from '../router/museum-router';
-import studentRouter from './../router/art-router';
+import museumRouter from '../router/museum-router';
+import artRouter from './../router/art-router';
 
 // middleware
 import errorMiddleWare from '../lib/middleware/error-middleware';
