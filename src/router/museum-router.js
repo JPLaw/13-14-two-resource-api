@@ -3,6 +3,7 @@
 import { Router } from 'express';
 import logger from '../lib/logger';
 import Museum from '../model/museum';
+import createError from 'http-errors';
 
 
 const museumRouter = new Router();
@@ -32,15 +33,29 @@ museumRouter.get('/api/museum/:id?', (request, response, next) => {
     .catch(next);
 
   museumRouter.put('/api/museum/:id?', (request, response, next) => {
+    if (JSON.stringify(request.body).length <= 2) return next(createError(400, 'Not found'));
+    
     Museum.init()
       .then(() => {
+        if(!request.body) {
+          const error = new Error();
+          err.status = 400;
+          return next(error);
+        }
         logger.log(logger.INFO, `MUSEUM ROUTER BEFORE PUT: Updating museum ${JSON.stringify(request.body)}`);
     
-        console.log(request.body, 'PUT REQUEST BODY');
-        return Museum.findByIdAndUpdate(request.params.id, request.body);
+        const options = {
+          new: true,
+          runValidators: true,
+        };
+        
+        // console.log(request.body, 'PUT REQUEST BODY');
+        return Museum.findByIdAndUpdate(request.params.id, request.body, options);
       })
       .then((updatedMuseum) => {
+        logger.log(logger.INFO, `MUSEUM ROUTER AFTER PUT: Updated museu, details ${JSON.stringify(updateMuseum)}`);
         console.log(updatedMuseum, 'UPDATED MUSEUM');
+        return reponse.json(updatedMuseum);
       })
       .catch(next);
   });

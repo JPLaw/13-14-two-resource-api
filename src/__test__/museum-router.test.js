@@ -92,5 +92,21 @@ describe('POST /api/museum', () => {
           throw err;
         });
     });
+    test('400 PUT if no request body was provided', () => {
+      return createMockMuseumPromise()
+        .then((newMuseum) => {
+          return superagent.put(`${apiUrl}/${newMuseum._id}`)
+            .then((response) => {
+              throw response;
+            })
+            .catch((err) => {
+              expect(err.status).toBe(400);
+            });
+        });
+    });
+  
+    test('404 PUT for valid request made with an id that was not found', () => {
+  
+    });
   });
 });
