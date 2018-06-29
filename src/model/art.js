@@ -10,13 +10,9 @@ const artSchema = mongoose.Schema({
     required: true,
     unique: true,
   },
-  artistFirstName: {
+  artistName: {
     type: String,
-    required: false,
-  },
-  artistLastName: {
-    type: String,
-    required: false,
+    required: true,
   },
   medium: {
     type: String,

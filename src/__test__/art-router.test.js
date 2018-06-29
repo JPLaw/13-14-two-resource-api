@@ -39,12 +39,18 @@ describe('POST /api/art', () => {
       });
   });
   test('400 POST for bad request if no request body was provided', () => {
-    return superagent.post(apiUrl)
-      .then((response) => {
-        throw response;
-      })
-      .catch((err) => {
-        expect(err.status).toBe(400);
+    return createMockDataPromise()
+      .then((mockData) => {
+        const mockArt = {
+          title: faker.lorem.words(2),
+          artistName: faker.lorem.words(2),
+          artId: mockData.art._id,
+        };
+        return superagent.post(apiUrl)
+          .send(mockArt)
+          .catch((error) => {
+            expect(error.status).toEqual(400);
+          });
       });
   });
 });
@@ -54,6 +60,7 @@ describe('GET /api/art', () => {
     let returnedArt;
     return createMockDataPromise()
       .then((mockData) => {
+        returnedArt = mockData.art;
         return superagent.get(`${apiUrl}/${mockData.art._id}`);
       })
       .then((response) => {
@@ -87,7 +94,7 @@ describe('PUT request to api/art', () => {
 
 
   test('200 PUT for succesful update of a resource', () => {
-    // let returnedArt;
+    let returnedArt;
     return createMockDataPromise()
       .then((mockData) => {
         returnedArt = mockData.art;
@@ -96,8 +103,8 @@ describe('PUT request to api/art', () => {
       })
       .then((response) => {
         expect(response.status).toEqual(200);
-        expect(response.body.name).toEqual(mockArtForUpdate.title);
-        expect(response.body.location).toEqual(mockArtForUpdate.artistName);
+        expect(response.body.title).toEqual(mockArtForUpdate.title);
+        expect(response.body.artistName).toEqual(mockArtForUpdate.artistName);
       })
       .catch((error) => {
         throw error;

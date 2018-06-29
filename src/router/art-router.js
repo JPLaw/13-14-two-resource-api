@@ -1,3 +1,5 @@
+'use strict';
+
 import { Router } from 'express';
 import HttpErrors from 'http-errors';
 import logger from '../lib/logger';
@@ -20,7 +22,7 @@ artRouter.post('/api/art', (request, response, next) => {
 
 artRouter.get('/api/art/:id?', (request, response, next) => {
   if (!request.params.id) {
-    return next(new HttpErrors(400, 'Did not enter and ID'));
+    return next(new HttpErrors(400, 'Did not enter an ID'));
   }
 
   Art.init()
@@ -28,26 +30,28 @@ artRouter.get('/api/art/:id?', (request, response, next) => {
       return Art.findOne({ _id: request.params.id });
     })
     .then((foundArt) => {
-      logger.log(logger.INFO, `ART ROUTER: AFTER GETTING ART ${JSON.stringify(foundArt)}`);
+      logger.log(logger.INFO, `ART ROUTER: After getting art: ${JSON.stringify(foundArt)}`);
       return response.json(foundArt);
     })
     .catch(next);
   return undefined;
 });
 
-artRouter.put('/api/art/:id?', (request, response, next) => {
-  if (JSON.stringify(request.body).length <= 2) return next(new HttpErrors(400, 'Not Found'));
+artRouter.put('/api/models/:id?', (request, response, next) => {
+  if (!request.params.id) {
+    logger.log(logger.INFO, 'Art Router PUT api/art: Responding with 400 code for no id passed in');
+    return response.sendStatus(400);
+  }
+
+  const options = {
+    new: true,
+    runValidators: true,
+  };
   
   Art.init()
     .then(() => {
       // error checking
       logger.log(logger.INFO, `ART ROUTER BEFORE PUT: Updating art piece ${JSON.stringify(request.body)}`);
-
-      const options = {
-        new: true,
-        runValidators: true,
-      };
-
       return Art.findByIdAndUpdate(request.params.id, request.body, options);
     })
     .then((updatedArt) => {
