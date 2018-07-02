@@ -137,4 +137,3 @@ test('404 PUT: No art piece with this ID', () => {
       expect(error.status).toEqual(404);
     });
 });
-
