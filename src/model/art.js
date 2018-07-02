@@ -47,7 +47,7 @@ const artPostHook = (document, done) => {
   // document refers to the current instance of this student schema
   return Museum.findById(document.museumId)
     .then((foundMuseum) => {
-      foundMuseum.students = foundMuseum.art.filter(art => art._id.toString() !== document._id.toString());
+      foundMuseum.art = foundMuseum.art.filter(art => art._id.toString() !== document._id.toString());
       return foundMuseum.save();
     })
     .then(() => done())

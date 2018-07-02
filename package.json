@@ -1,7 +1,7 @@
 {
   "name": "11-mongodb-single-resource",
   "version": "1.0.0",
-  "description": "",
+  "description": "[![Build Status](https://travis-ci.org/JPLaw/13-14-two-resource-api.svg?branch=master)](https://travis-ci.org/JPLaw/13-14-two-resource-api)",
   "main": "index.js",
   "scripts": {
     "dev-start": "nodemon index.js",
@@ -45,5 +45,13 @@
     "express": "^4.16.3",
     "http-errors": "^1.6.3",
     "mongoose": "^5.1.6"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JPLaw/13-14-two-resource-api.git"
+  },
+  "bugs": {
+    "url": "https://github.com/JPLaw/13-14-two-resource-api/issues"
+  },
+  "homepage": "https://github.com/JPLaw/13-14-two-resource-api#readme"
 }

@@ -75,65 +75,54 @@ describe('GET /api/art', () => {
   });
 
   test('404 GET: No art piece with this ID', () => {
-    return superagent.get(`${apiUrl}/1234`)
-      .then((results) => {
-        throw results;
-      })
-      .catch((error) => {
-        expect(error.status).toEqual(404);
-      });
-  });
-});
-
-
-describe('PUT request to api/art', () => {
-  const mockArtForUpdate = {
-    title: 'Starry Night',
-    artistName: 'Vincent VanGough',
-  };
-
-
-  test('200 PUT for succesful update of a resource', () => {
-    let returnedArt;
     return createMockDataPromise()
-      .then((mockData) => {
-        returnedArt = mockData.art;
-        return superagent.put(`${apiUrl}/${mockData.art._id}`)
-          .send(mockArtForUpdate);
-      })
-      .then((response) => {
-        expect(response.status).toEqual(200);
-        expect(response.body.title).toEqual(mockArtForUpdate.title);
-        expect(response.body.artistName).toEqual(mockArtForUpdate.artistName);
-      })
-      .catch((error) => {
-        throw error;
+      .then(() => {
+        return superagent.get(`${apiUrl}/1234`)
+          .catch((error) => {
+            expect(error.status).toEqual(404);
+          });
       });
   });
-});
 
-test('400 PUT if no request body was provided', () => {
-  let returnedArt;
-  return createMockDataPromise()
-    .then((mockData) => {
-      returnedArt = mockData.art;
-      return superagent.put(`${apiUrl}/${mockData.art._id}`);
-    })
-    .then((reponse) => {
-      throw reponse;
-    })
-    .catch((error) => {
-      expect(error.status).toEqual(400);
-    });
-});
 
-test('404 PUT: No art piece with this ID', () => {
-  return superagent.put(`${apiUrl}/1234`)
-    .send(mockArtForUpdate)
-    .then((response) => {
-      throw response;
-    })
-    .catch((error) => {
-      expect(error.status).toEqual(404);
+  describe('PUT request to api/art', () => {
+    test('200 PUT for succesful update of a resource', () => {
+      return createMockDataPromise()
+        .then((mockData) => {
+          return superagent.put(`${apiUrl}/${mockData.art._id}`)
+            .send({ title: 'updated title', artistName: 'updated name' })
+            .then((response) => {
+              expect(response.status).toEqual(200);
+              expect(response.body.title).toEqual('updated title');
+              expect(response.body.artistName).toEqual('updated name');
+            })
+            .catch((error) => {
+              throw error;
+            })
+            .catch((error) => {
+              throw error;
+            });
+        });
     });
+
+    test('404 PUT: No art piece with this ID', () => {
+      return createMockDataPromise()
+        .then(() => {
+          return superagent.put(`${apiUrl}/1234`)
+            .catch((error) => {
+              expect(error.status).toEqual(404);
+            });
+        });
+    });
+
+    test('400 PUT: No path', () => {
+      return superagent.put(`${apiUrl}`)
+        .then((response) => {
+          throw response;
+        })
+        .catch((error) => {
+          expect(error.status).toEqual(400);
+        });
+    });
+  });
 });
