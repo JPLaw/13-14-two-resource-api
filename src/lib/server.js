@@ -23,14 +23,12 @@ app.use(loggerMiddleware);
 app.use(museumRouter);
 app.use(artRouter);
 
-app.use(errorMiddleWare);
-
 // catch all
 app.all('*', (request, response) => {
   console.log('Returning a 404 from the catch/all route'); /* eslint-disable-line */
   return response.sendStatus(404).send('Route Not Registered');
 });
-
+app.use(errorMiddleWare);
 
 const startServer = () => {
   return mongoose.connect(process.env.MONGODB_URI)

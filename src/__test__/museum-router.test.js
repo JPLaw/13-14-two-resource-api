@@ -34,7 +34,7 @@ describe('POST /api/museum', () => {
   test('POST 400 for bad request if no request body was provided', () => {
     return superagent.post(apiUrl)
       .then((response) => {
-        throw response;
+        return response;
       })
       .catch((err) => {
         expect(err.status).toEqual(400);
@@ -64,7 +64,7 @@ describe('POST /api/museum', () => {
           throw response;
         })
         .catch((err) => {
-          expect(err.status).toBe(404);
+          expect(err.status).toEqual(404);
         });
     });
   });
@@ -84,10 +84,10 @@ describe('POST /api/museum', () => {
             .send(mockMuseumForUpdate);
         })
         .then((response) => {
-          expect(response.status).toBe(200);
-          expect(response.body._id.toString()).toBe(returnedMuseum._id.toString());
-          expect(response.body.name).toBe(mockMuseumForUpdate.name);
-          expect(response.body.location).toBe(response.body.location);
+          expect(response.status).toEqual(200);
+          expect(response.body._id.toString()).toEqual(returnedMuseum._id.toString());
+          expect(response.body.name).toEqual(mockMuseumForUpdate.name);
+          expect(response.body.location).toEqual(response.body.location);
         })
         .catch((err) => {
           throw err;
@@ -95,19 +95,15 @@ describe('POST /api/museum', () => {
     });
     test('400 PUT if no request body was provided', () => {
       return createMockMuseumPromise()
-        .then((newMuseum) => {
-          return superagent.put(`${apiUrl}/${newMuseum._id}`)
+        .then(() => {
+          return superagent.put(`${apiUrl}`)
             .then((response) => {
               throw response;
             })
-            .catch((err) => {
-              expect(err.status).toBe(400);
+            .catch((error) => {
+              expect(error.status).toEqual(400);
             });
         });
-    });
-  
-    test('404 PUT for valid request made with an id that was not found', () => {
-  
     });
   });
 });

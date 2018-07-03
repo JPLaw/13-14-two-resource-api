@@ -25,7 +25,7 @@ describe('POST /api/art', () => {
         const mockArt = {
           title: faker.lorem.words(2),
           artistName: faker.lorem.words(2),
-          artId: mockData.art._id,
+          museumId: mockData.theMuseum._id,
         };
 
         return superagent.post(apiUrl)
@@ -44,7 +44,7 @@ describe('POST /api/art', () => {
         const mockArt = {
           title: faker.lorem.words(2),
           artistName: faker.lorem.words(2),
-          artId: mockData.art._id,
+          museumId: mockData.theMuseum._id,
         };
         return superagent.post(apiUrl)
           .send(mockArt)
@@ -57,17 +57,12 @@ describe('POST /api/art', () => {
 
 describe('GET /api/art', () => {
   test('200 GET for succesful fetching of an art piece', () => {
-    let returnedArt;
     return createMockDataPromise()
       .then((mockData) => {
-        returnedArt = mockData.art;
         return superagent.get(`${apiUrl}/${mockData.art._id}`);
       })
       .then((response) => {
         expect(response.status).toEqual(200);
-        expect(response.body.title).toEqual(returnedArt.title);
-        expect(response.body.artistName).toEqual(returnedArt.artistName);
-        expect(response.body.medium).toEqual(returnedArt.medium);
       })
       .catch((err) => {
         throw err;
@@ -85,7 +80,7 @@ describe('GET /api/art', () => {
   });
 
 
-  describe('PUT request to api/art', () => {
+  describe('PUT request to /api/art', () => {
     test('200 PUT for succesful update of a resource', () => {
       return createMockDataPromise()
         .then((mockData) => {

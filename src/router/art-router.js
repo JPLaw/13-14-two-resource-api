@@ -37,7 +37,7 @@ artRouter.get('/api/art/:id?', (request, response, next) => {
   return undefined;
 });
 
-artRouter.put('/api/models/:id?', (request, response, next) => {
+artRouter.put('/api/art/:id?', (request, response, next) => {
   if (!request.params.id) {
     logger.log(logger.INFO, 'Art Router PUT api/art: Responding with 400 code for no id passed in');
     return response.sendStatus(400);

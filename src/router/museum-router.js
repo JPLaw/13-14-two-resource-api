@@ -34,13 +34,16 @@ museumRouter.get('/api/museum/:id?', (request, response, next) => {
 });
 
 museumRouter.put('/api/museum/:id?', (request, response, next) => { 
+  console.log(request.body, 'HAHAHAHAHAHAHAHAHA');
+  if (!request.body.name) {
+    console.log('HAHAHAHAHAHA');
+    const error = new Error();
+    error.status = 400;
+    return next(error);
+  }
+  
   Museum.init()
     .then(() => {
-      if (!request.body) {
-        const error = new Error();
-        error.status = 400;
-        return next(error);
-      }
       logger.log(logger.INFO, `MUSEUM ROUTER BEFORE PUT: Updating museum ${JSON.stringify(request.body)}`);
     
       const options = {
@@ -52,11 +55,17 @@ museumRouter.put('/api/museum/:id?', (request, response, next) => {
       return Museum.findByIdAndUpdate(request.params.id, request.body, options);
     })
     .then((updatedMuseum) => {
+      if (!updatedMuseum) {
+        const error = new Error();
+        error.status = 404;
+        return next(error);
+      }
       logger.log(logger.INFO, `MUSEUM ROUTER AFTER PUT: Updated museu, details ${JSON.stringify(updatedMuseum)}`);
       console.log(updatedMuseum, 'UPDATED MUSEUM'); /* eslint-disable-line*/
       return response.json(updatedMuseum);
     })
     .catch(next);
+  return undefined;
 });
 
 

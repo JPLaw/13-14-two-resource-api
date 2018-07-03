@@ -7,20 +7,12 @@ export default () => {
   return museumMockPromise()
     .then((newMuseum) => {
       mockData.theMuseum = newMuseum;
-      /*
-      mockData = {
-        classRoom: {
-          _id: 1342342354235235,
-          name: some random words
-        }
-      }
-      */
     })
     .then(() => {
       const mockArt = {
         title: faker.lorem.words(2),
         artistName: faker.lorem.words(2),
-        theMuseumId: mockData.theMuseum._id,
+        museumId: mockData.theMuseum._id,
       };
       return new Art(mockArt).save();
     })
