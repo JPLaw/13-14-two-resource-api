@@ -2,8 +2,8 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import logger from './logger';
-import classroomRouter from '../router/museum-router';
-import studentRouter from './../router/art-router';
+import museumRouter from '../router/museum-router';
+import artRouter from './../router/art-router';
 
 // middleware
 import errorMiddleWare from '../lib/middleware/error-middleware';
@@ -23,20 +23,18 @@ app.use(loggerMiddleware);
 app.use(museumRouter);
 app.use(artRouter);
 
-app.use(errorMiddleWare);
-
 // catch all
 app.all('*', (request, response) => {
-  console.log('Returning a 404 from the catch/all route');
+  console.log('Returning a 404 from the catch/all route'); /* eslint-disable-line */
   return response.sendStatus(404).send('Route Not Registered');
 });
-
+app.use(errorMiddleWare);
 
 const startServer = () => {
   return mongoose.connect(process.env.MONGODB_URI)
     .then(() => {
       server = app.listen(PORT, () => {
-        console.log('Server up:', PORT);
+        console.log('Server up:', PORT); /* eslint-disable-line */
       });
     })
     .catch((err) => {
