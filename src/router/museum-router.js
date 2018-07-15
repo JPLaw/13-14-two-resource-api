@@ -34,9 +34,7 @@ museumRouter.get('/api/museum/:id?', (request, response, next) => {
 });
 
 museumRouter.put('/api/museum/:id?', (request, response, next) => { 
-  console.log(request.body, 'HAHAHAHAHAHAHAHAHA');
   if (!request.body.name) {
-    console.log('HAHAHAHAHAHA');
     const error = new Error();
     error.status = 400;
     return next(error);
