@@ -11,11 +11,13 @@ const apiUrl = `http://localhost:${process.env.PORT}/api/art`;
 
 beforeAll(startServer);
 afterAll(stopServer);
-afterEach(() => {
+
+afterEach((done) => {
   Promise.all([
     Museum.remove({}),
     Art.remove({}),
   ]);
+  done();
 });
 
 describe('POST /api/art', () => {
