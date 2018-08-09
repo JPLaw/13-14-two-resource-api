@@ -2,6 +2,15 @@
 
 import mongoose from 'mongoose';
 
+/*
+  SQL equivalent:
+  CREATE TABLE MUSEUM (
+    name VARCHAR,
+    art VARCHAR,
+    patrons VARCHAR,
+  )
+*/
+
 const theMuseumSchema = mongoose.Schema({
   name: {
     type: String,
