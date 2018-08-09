@@ -3,6 +3,16 @@
 import mongoose from 'mongoose';
 import Museum from './museum';
 
+/*
+  SQL equivalent:
+  CREATE TABLE ART (
+    title VARCHAR,
+    artistName VARCHAR,
+    medium VARCHAR,
+    artId VARCHAR,
+  )
+*/
+
 
 const artSchema = mongoose.Schema({
   title: {
@@ -19,7 +29,7 @@ const artSchema = mongoose.Schema({
     default: 'Painting',
     enum: ['Painting', 'sculpture', 'sketch', 'photography'],
   },
-  museumId: { 
+  artId: { 
     type: mongoose.Schema.Types.ObjectId,
     required: true,
     ref: 'museum',
@@ -34,6 +44,12 @@ export default mongoose.model('art', artSchema, 'art', skipInit);
 function artPreHook(done) {
   // done is using an (error,data) signature
   // the value of 'contextual this' is the document
+
+  /*
+  SQL equivalent:
+  SELECT TOP_______ FROM ART WHERE museumID = ____________
+*/
+
   return Museum.findById(this.museumId)
     .then((foundMuseum) => {
       foundMuseum.art.push(this._id);

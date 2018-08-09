@@ -7,7 +7,13 @@ import Art from '../model/art';
 
 const artRouter = new Router();
 
+
 artRouter.post('/api/art', (request, response, next) => {
+  /*
+    SQL equivalent:
+    INSERT INTO ART (title, artistName, medium, artId)
+    VALUES ('title', 'artistName', 'medium', 'artId');
+    */
   Art.init()
     .then(() => {
       logger.log(logger.INFO, `ART ROUTER: POST BEFORE SAVE: ${JSON.stringify(request.body)}`);
@@ -27,6 +33,11 @@ artRouter.get('/api/art/:id?', (request, response, next) => {
 
   Art.init()
     .then(() => {
+      /*
+     SQL equivalent:
+    SELECT TOP 1 * FROM ART WHERE artId = artId
+  )
+  */
       return Art.findOne({ _id: request.params.id });
     })
     .then((foundArt) => {

@@ -9,6 +9,11 @@ modelRouter.param('model', modelFinder);
 
 modelRouter.post('/api/:model', (request, response, next) => {
   const Model = request.model;
+    /*
+    SQL equivalent:
+    INSERT INTO MODEL (title, artistName, medium, artId)
+    VALUES ('title', 'artistName', 'medium', 'artId');
+    */
   Model.init()
     .then(() => {
       logger.log(logger.INFO, `MODEL-ROUTER, BEFORE SAVING A NEW ${request.params.model}: ${JSON.stringify(request.body)}`);
